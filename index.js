@@ -12,6 +12,28 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
+let profileData = {
+  fullName: "",
+  email: "",
+  address: "",
+  city: "",
+  education: "",
+  role: "",
+  experience: "",
+  bio: "",
+  upload: [],
+  skills: [],
+};
+
+app.get("/api/getProfile", (req, res) => {
+  try {
+    res.status(200).json(profileData);
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 app.get("/api/users/:id", (req, res) => {
   const id = req.params.id;
 
@@ -53,3 +75,38 @@ function getUser(id) {
   ];
   return users.find((p) => p.id == id);
 }
+
+app.post("/api/updateProfile", (req, res) => {
+  try {
+    const {
+      fullName,
+      email,
+      address,
+      city,
+      education,
+      role,
+      experience,
+      bio,
+      upload,
+      skills,
+    } = req.body;
+
+    profileData = {
+      fullName,
+      email,
+      address,
+      city,
+      education,
+      role,
+      experience,
+      bio,
+      upload,
+      skills,
+    };
+
+    res.status(200).json({ message: "Profile updated successfully!" });
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
